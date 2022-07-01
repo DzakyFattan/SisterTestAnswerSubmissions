@@ -5,7 +5,7 @@ Jawaban Seleksi Bagian B Lab Sister
 13520003 - Dzaky Fattan Rizqullah
 
 
-### Progress:
+### Progress: **(4/15)**
 1. Not started
 2. Not started
 3. Not started
@@ -16,8 +16,8 @@ Jawaban Seleksi Bagian B Lab Sister
 8. In progress
 9. Not started
 10. Not started
-11. Not started
+11. Done, minimal
 12. Done
 13. Not started
 14. Not started
-15. Done, maybe
+15. Done, minimal
