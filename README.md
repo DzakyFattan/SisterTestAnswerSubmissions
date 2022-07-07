@@ -15,7 +15,7 @@ Jawaban Seleksi Bagian B Lab Sister
 7. Not started
 8. In progress
 9. Not started
-10. Not started
+10. Done, minimum viable
 11. Done, minimum viable
 12. Done
 13. Not started
