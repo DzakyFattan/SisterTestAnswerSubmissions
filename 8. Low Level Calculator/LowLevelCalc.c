@@ -1,90 +1,191 @@
-#include <stdio.h>
+#include "LoveLevelCalc.h"
+
+void Input(char *str, int *a)
+{
+  printf("Masukkan Operand / I (tidak berfungsi) (Masukkan \"Keluar\" untuk keluar): ");
+  scanf("%s", str);
+  if (strcmp(str, "Keluar") == 0 || strcmp(str, "keluar") == 0)
+  {
+    printf("Terima kasih telah menggunakan Low Level Calculator.\n");
+    exit(0);
+  }
+  else
+  {
+    *a = atoi(str);
+  }
+}
 
 int main()
 {
-    printf("Low Level Calculator\n");
-    printf("Operasi yang dapat dilakukan: \nPenjumlahan (+), Pengurangan (-), Perkalian (*), Pembagian (/), pangkat (^), 1/sqrt(x) (I)\n");
-    printf("Penggunaan: Tuliskan ekspresi yang akan dilakukan, antara operator dan operan TIDAK dipisahkan spasi, diakhiri oleh sama dengan (=). maksimal 10 operan.\n");
-    printf("Misal: '3*7+5-2/4+I(1)=' (Hasil = 4, ekspresi dievaluasi kiri ke kanan)\n");
+  printf("Low Level Calculator\n");
 
-    char operasi[50];
-    double a, b;
-    char op;
-    int operan_pos;
-    int op_pos;
+  printf("Masukan yang diterima adalah integer (4 byte).\n");
+  printf("Operasi yang dapat dilakukan: \nPenjumlahan (+), Pengurangan (-), Perkalian (*), Pembagian (/), pangkat (^), 1/sqrt(x) (I)\n");
+  printf("Penggunaan: Masukkan Operan terlebih dahulu diikuti enter, kemudian menekan tombol operator yang sesuai diikuti enter pula, \nkemudian masukkan operan selanjutnya, begitu seterusnya hingga diakhiri dengan sama dengan dan enter\n");
+  printf("Operator (I) merupakan fungsi, sehingga operator ini tidak dapat dimasukkan tepat setelah operan. \nFungsi ini dapat dimasukkan paling awal ataupun tepat setelah operator lain selain (I)\n");
+  
+  printf("Catatan: fungsi 1/sqrt(x) belum dapat bekerja.\n");
+  printf("Catatan 2: Error-handling minim.\n");
 
-MAINLOOP:
-    int i = 0;
-    CLEARSTR:
-    operasi[i] = '\0';
-    i++;
-    if (i < 50)
+  char str[100];
+  int op;   // operator
+  int a, b; // operan
+  int eq = 1;
+
+  while (1)
+  {
+    memset(str, 0, 100);
+    if (eq)
     {
-        goto CLEARSTR;
+      Input(str, &a);
+      eq = 0;
     }
-    printf("%s", operasi);
-
-    operan_pos = 0;
-    op_pos = 1;
-    a = 8;
-
-    printf(">>> ");
-    scanf("%s", operasi);
-
-    if (operasi[0] == '=')
+    printf("Masukkan Operator \n[1] +   [2] -   [3] *   \n[4] /   [5] ^   [6] =\n");
+    scanf("%d", &op);
+    eq = 0;
+    if (op < 1 || op > 6)
     {
-        printf("Tidak ada operasi yang dilakukan\n");
-        goto MAINLOOP;
+      printf("Operator tidak valid\n");
+      break;
     }
-    else if (operasi[0] == '+' || operasi[0] == '-' || operasi[0] == '*' || operasi[0] == '/')
+    else if (op == 6)
     {
-        printf("Tidak ada operan\n");
-        goto MAINLOOP;
+      printf("Hasil = %d\n", a);
+      eq = 1;
+      continue;
     }
-    else
-    {
-        OPERASI:
-        
-        op = operasi[op_pos];
 
-        if (op = '=') {
-            printf("%d \n", a);
-            goto MAINLOOP;
-        }
-        else if (op != '+' && op != '-' && op != '*' && op != '/' && op != '^' && op != 'I' && op != '=')
-        {
-            printf("Terjadi Kesalahan\n");
-            goto MAINLOOP;
-        }
-        else
-        {
-            if (op == '+')
-            {
-                operan_pos += 2;
-                b = operasi[operan_pos] - '0';
-                a = a + b;
-                goto OPERASI;
-            }
-            else if (op == '-')
-            {
-                printf("%d - ", a);
-            }
-            else if (op == '*')
-            {
-                printf("%d * ", a);
-            }
-            else if (op == '/')
-            {
-                printf("%d / ", a);
-            }
-            else if (op == '^')
-            {
-                printf("%d ^ ", a);
-            }
-            else if (op == 'I')
-            {
-                printf("1/%d ", a);
-            }
-        }
+    Input(str, &b);
+
+    switch (op)
+    {
+    case 1:
+      Add(&a, b);
+      break;
+    case 2:
+      Sub(&a, b);
+      break;
+    case 3:
+      Mul(&a, b);
+      break;
+    case 4:
+      Div(&a, b);
+      break;
+    case 5:
+      Pow(&a, b);
+      break;
     }
+
+    printf("Hasil Sementara = %d\n", a);
+  }
+
+  return 0;
+}
+
+void Add(int *a, int b)
+{
+  if (b != 0)
+  {
+    int tempadd = (*a & b) << 1;
+    *a = *a ^ b;
+    Add(a, tempadd);
+  }
+}
+
+void Sub(int *a, int b)
+{
+  if (b != 0)
+  {
+    int tempsub = (~(*a) & b) << 1;
+    *a = *a ^ b;
+    Sub(a, tempsub);
+  }
+}
+
+void Mul(int *a, int b)
+{
+  int ans = 0;
+MULLOOP:
+  if (b > 0)
+  {
+    if (b & 1)
+    {
+      Add(&ans, *a);
+    }
+    *a = *a << 1;
+    b = b >> 1;
+    goto MULLOOP;
+  }
+  *a = ans;
+}
+
+void Div(int *a, int b)
+{
+  if (b == 0)
+  {
+    printf("Error: Division by 0\n");
+    exit(0);
+  }
+
+  int sign;
+  if ((*a < 0) ^ (b < 0))
+  {
+    sign = 1;
+  }
+  else
+  {
+    sign = 0;
+  }
+
+  Abs(a);
+  Abs(&b);
+
+  int ans = 0;
+
+D1:
+  Sub(a, b);
+  Add(&ans, 1);
+  if (*a >= b)
+  {
+    goto D1;
+  }
+
+  if (sign)
+  {
+    ans = ~ans;
+    Add(&ans, 1);
+  }
+  *a = ans;
+}
+
+void Pow(int *a, int b)
+{
+  int ans = 1;
+  int m;
+POWLOOP:
+  m = (b & 1);
+
+  if (m)
+  {
+    Mul(&ans, *a);
+  }
+  Mul(a, *a);
+  b >>= 1;
+
+  if (b > 0)
+  {
+    goto POWLOOP;
+  }
+
+  *a = ans;
+}
+
+void Abs(int *a)
+{
+  if (*a < 0)
+  {
+    int temp = (*a >> 31) ^ *a;
+    Sub(&temp, (*a >> 31));
+    *a = temp;
+  }
 }
