@@ -8,9 +8,9 @@ Jawaban Seleksi Bagian B Lab Sister
 ### Progress: **(4/15)**
 1. In progress
 2. Done
-3. Not started
+3. In progress
 4. Done
-5. In progress
+5. Done
 6. Done
 7. Done, minimum viable
 8. Done, minimum viable
