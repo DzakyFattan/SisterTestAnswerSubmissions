@@ -5,7 +5,7 @@ Jawaban Seleksi Bagian B Lab Sister
 13520003 - Dzaky Fattan Rizqullah
 
 
-### Progress: **(4/15)**
+### Progress: **(10/15)**
 1. In progress
 2. Done
 3. In progress
